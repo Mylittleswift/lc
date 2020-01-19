@@ -3,6 +3,7 @@
 |  1  | [Two Sum](#1-two-sum)                       | Array, Hash Table        | Google,Facebook,Amazon,Apple |
 |  2  | [Add Two Number](#2-add-two-numbers)        | Linked List, Math        | Google,Facebook,Amazon,Apple |
 |  3  | [Longest Substring Without Repeating Characters](#3-longest-substring-without-repeating-characters)| Linked List, Math        | Google,Facebook,Amazon,Apple |
+|  4  | [Longest Substring Without Repeating Characters](#3-median-of-two-sorted-arrays)| Linked List, Math        | Google,Facebook,Amazon,Apple |
 
 
 
@@ -121,32 +122,32 @@ Explanation: The answer is "wke", with the length of 3.
 
 ```swift
 class Solution {
- func lengthOfLongestSubstring(_ s: String) -> Int {
-     var right = 1
-     var left = 0
-     var i = 0
-     var result = 0
+    func lengthOfLongestSubstring(_ s: String) -> Int {
+        var right = 1
+        var left = 0
+        var i = 0
+        var result = 0
      
-     if s.count > 0 {
-         result = right - left
-         let chars = Array(s.utf8)
+        if s.count > 0 {
+            result = right - left
+            let chars = Array(s.utf8)
          
-         //Interate in a incremental window 
-         while right < chars.count {
-             i = left
+            //Interate in a incremental window 
+            while right < chars.count {
+                i = left
                 while i < right {
                     //Check if a duplicate is found
                     if chars[i] == chars[right] {
                         left = i + 1
                         break
-                    } 
-                i = i + 1
+                     } 
+                     i = i + 1
+                 }
+                 result = max(result,right-left+1)     
+                 right = right + 1
              }
-         result = max(result,right-left+1)     
-         right = right + 1
-     }
-     }
-     return result
+         }
+         return result
      }
 }
 ```
@@ -176,57 +177,6 @@ The median is (2 + 3)/2 = 2.5
 
 ```swift
 class Solution {
-func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {
-    var i = 0, j = 0
-    var m = nums1.count, n = nums2.count
-    var arr1 = nums1, arr2 = nums2
-    if m > n {
-        swap(&m, &n)
-        swap(&arr1, &arr2)
-    }
-    let half = (m + n) / 2
-
-    var leftMax = 0, rightMin = 0
-    
-    // 长度为m的数组分割，有m+1种分割方法，所以 0 <= i <= m
-    var min = 0, max = m
-    while min <= max {
-        i = (min + max) / 2
-        j = half - i
-        if i > 0 && arr1[i-1] > arr2[j] {
-            max = i - 1
-        } else if i < m && arr2[j-1] > arr1[i] {
-            min = i + 1
-        } else {
-            // arr1 所有元素都在左边，则min(Right) = arr2[j]
-            if i == m {
-                rightMin = arr2[j]
-            } else if j == n {
-                rightMin = arr1[i]
-            } else {
-                rightMin = arr1[i] > arr2[j] ? arr2[j] : arr1[i]
-            }
-            
-            if (m + n) % 2 == 1 {
-                return Double(rightMin)
-            }
-            
-            if i == 0 {
-                leftMax = arr2[j - 1]
-            } else if j == 0 {
-                leftMax = arr1[i - 1]
-            } else {
-                leftMax = arr1[i-1] > arr2[j-1] ? arr1[i-1] : arr2[j-1]
-            }
-            return Double(leftMax + rightMin) / 2.0
-        }
-    }
-    return 0
-}
-}
-```
-```swift
-class Solution {
     func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {
         let mergeArray = (nums1 + nums2).sorted()
         let isOdd = mergeArray.count % 2
@@ -239,6 +189,23 @@ class Solution {
         }
     }
 }
+```
+
+### 5. Longest Palindromic Substring
+_Medium_
+
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example 1:
+```
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+```
+Example 2:
+```
+Input: "cbbd"
+Output: "bb"
 ```
 
 
